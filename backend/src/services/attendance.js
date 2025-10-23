@@ -6,7 +6,6 @@ const prisma = new PrismaClient();
 
 export async function recordAttendance(userId, token, metadata = {}) {
   try {
-    // Validate token
     const validation = validateQRToken(token);
     if (!validation.valid) {
       return {
@@ -31,7 +30,6 @@ export async function recordAttendance(userId, token, metadata = {}) {
       };
     }
 
-    // Check for duplicate attendance
     const existingAttendance = await prisma.attendance.findUnique({
       where: {
         userId_sessionId: {

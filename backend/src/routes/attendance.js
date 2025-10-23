@@ -24,9 +24,8 @@ router.post(
 
       const metadata = {
         ipAddress:
-          req.ip ||
-          req.headers["x-forwarded-for"] ||
-          req.connection.remoteAddress,
+          req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
+          req.socket?.remoteAddress,
         userAgent: req.headers["user-agent"],
         latitude: req.body.latitude,
         longitude: req.body.longitude,
@@ -83,7 +82,7 @@ router.get(
         ipAddress:
           req.ip ||
           req.headers["x-forwarded-for"] ||
-          req.connection.remoteAddress,
+          req.socket?.remoteAddress,
         userAgent: req.headers["user-agent"],
       };
 

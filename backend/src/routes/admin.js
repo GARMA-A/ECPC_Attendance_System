@@ -10,7 +10,7 @@ router.get(
   "/users",
   authMiddleware,
   roleMiddleware("admin"),
-  async (req, res) => {
+  async (_, res) => {
     try {
       const users = await prisma.user.findMany({
         select: {

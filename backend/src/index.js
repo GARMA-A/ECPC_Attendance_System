@@ -65,7 +65,7 @@ app.use((req, res, next) => {
 });
 
 // Health check
-app.get("/health", (req, res) => {
+app.get("/health", (_, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 

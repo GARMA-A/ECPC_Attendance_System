@@ -23,12 +23,12 @@ router.post("/login", authLimiter, async (req, res) => {
     });
 
     if (!user) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({ error: "Invalide username or password" });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      return res.status(401).json({ error: "Invalid credentials" });
+      return res.status(401).json({ error: "Invalid username or password" });
     }
 
     const token = generateToken(user);
@@ -60,8 +60,72 @@ router.post("/login", authLimiter, async (req, res) => {
   }
 });
 
+// Signup
+router.post("/signup", authLimiter, async (req, res) => {
+  try {
+    const { username, password, name, groupName } = req.body;
+
+    if (!username || !password || !name) {
+      return res.status(400).json({ error: "Username, password, and name are required" });
+    }
+
+    // Check if username already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { username },
+    });
+
+    if (existingUser) {
+      return res.status(400).json({ error: "Username already taken" });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await prisma.user.create({
+      data: {
+        username,
+        password: hashedPassword,
+        name,
+        groupName,
+        role: "student",
+      },
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        role: true,
+        groupName: true,
+        createdAt: true,
+      },
+    });
+
+    console.log("Created new user:", newUser);
+
+    const token = generateToken(newUser);
+
+    const isSecure = process.env.COOKIE_SECURE === "true";
+    const sameSite = process.env.COOKIE_SAME_SITE || "lax";
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: isSecure,
+      sameSite: sameSite,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "User registered successfully",
+      user: newUser,
+    });
+  } catch (error) {
+    console.error("Signup error:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // Logout
-router.post("/logout", (req, res) => {
+router.post("/logout", (_, res) => {
   res.clearCookie("token");
   return res.json({ success: true, message: "Logged out successfully" });
 });
