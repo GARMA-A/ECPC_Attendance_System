@@ -109,26 +109,22 @@ export default function ScanQR() {
   return (
     <Layout>
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">
+        <div className="bg-slate-800 border border-slate-700 rounded-lg shadow-2xl p-8">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent mb-4">
             {t("scanQRCode")}
           </h1>
-
-          <p className="text-gray-600 mb-6">{t("scanInstructions")}</p>
-
+          <p className="text-slate-300 mb-6">{t("scanInstructions")}</p>
           {error && (
-            <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            <div className="mb-4 p-4 bg-red-900 border border-red-700 text-red-200 rounded-lg">
               {error}
             </div>
           )}
-
           {result && (
             <div
-              className={`mb-4 p-4 rounded ${
-                result.success
-                  ? "bg-green-100 border border-green-400 text-green-700"
-                  : "bg-red-100 border border-red-400 text-red-700"
-              }`}
+              className={`mb-4 p-4 rounded-lg ${result.success
+                ? "bg-green-900 border border-green-700 text-green-200"
+                : "bg-red-900 border border-red-700 text-red-200"
+                }`}
             >
               <p className="font-bold text-lg">
                 {result.success
@@ -154,27 +150,25 @@ export default function ScanQR() {
               )}
             </div>
           )}
-
           <div className="mb-6">
             <div
               id="qr-reader"
-              className="border-4 border-blue-500 rounded-lg overflow-hidden"
+              className="border-4 border-cyan-500 rounded-lg overflow-hidden shadow-lg shadow-cyan-500/30"
               style={{ minHeight: scanning ? "300px" : "0px" }}
             ></div>
           </div>
-
           <div className="flex justify-center space-x-4 rtl:space-x-reverse">
             {!scanning ? (
               <button
                 onClick={startScanning}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all shadow-lg hover:shadow-cyan-500/50"
               >
                 {t("startScanning")}
               </button>
             ) : (
               <button
                 onClick={stopScanning}
-                className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                className="px-6 py-3 bg-gradient-to-r from-red-600 to-rose-600 text-white font-semibold rounded-lg hover:from-red-700 hover:to-rose-700 transition-all shadow-lg hover:shadow-red-500/50"
               >
                 {t("stopScanning")}
               </button>
