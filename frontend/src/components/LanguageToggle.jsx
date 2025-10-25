@@ -6,9 +6,13 @@ export default function LanguageToggle() {
   return (
     <button
       onClick={toggleLanguage}
-      className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg transition-colors"
+      className="p-2 px-4 bg-gray-200 text-xs sm:text-sm font-semibold 
+                           rounded-lg shadow-lg hover:shadow-gray-100/50
+                           hover:scale-105 active:scale-95 
+                           transition-all duration-300 ease-in-out"
     >
-      {language === "ar" ? "English" : "العربية"}
-    </button>
+      {language === "ar" ? "English" : "العربية"
+      }
+    </button >
   );
 }

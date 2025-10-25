@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import api from "../services/api";
 import Layout from "../components/Layout";
+import SessionCard from "../components/SessionCard";
 
 export default function InstructorDashboard() {
   const { user } = useAuth();
@@ -116,7 +117,7 @@ export default function InstructorDashboard() {
     <Layout>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+          <h1 className="hidden sm:block text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
             {t("dashboard")} - {t("instructor")}
           </h1>
           <button
@@ -211,7 +212,7 @@ export default function InstructorDashboard() {
               <img
                 src={qrData.qrCode}
                 alt="QR Code"
-                className="w-96 h-96 border-4 border-cyan-500 rounded-lg shadow-lg shadow-cyan-500/30"
+                class="w-44 h-44 sm:w-96 sm:h-96 border-4 border-cyan-500 rounded-lg shadow-lg shadow-cyan-500/30 transition-all duration-300"
               />
               <p className="mt-4 text-sm text-slate-300">
                 Expires in: {qrData.expiresIn} seconds
@@ -283,41 +284,38 @@ export default function InstructorDashboard() {
           </div>
         )}
 
-        {/* Sessions List */}
-        <div className="bg-slate-800 border border-slate-700 rounded-lg shadow-2xl p-6">
+        {/* Desktop Sessions List */}
+        <div className="hidden sm:block bg-slate-800 border border-slate-700 rounded-lg shadow-2xl p-6">
           <h2 className="text-xl font-bold text-cyan-400 mb-4">
             {t("sessions")}
           </h2>
           <div className="space-y-4">
             {sessions.map((session) => (
-              <div
+              <SessionCard
                 key={session.id}
-                className="border border-slate-700 bg-slate-900 rounded-lg p-4 hover:bg-slate-700 transition-colors"
-              >
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="font-semibold text-slate-200">
-                      {session.name}
-                    </h3>
-                    <p className="text-sm text-slate-300">
-                      {session.courseName}
-                    </p>
-                    <p className="text-xs text-slate-400">
-                      {new Date(session.date).toLocaleString()}
-                    </p>
-                    <p className="text-xs text-cyan-400 font-medium">
-                      Attendance: {session._count.attendances}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => startQRRotation(session.id)}
-                    disabled={selectedSession === session.id}
-                    className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all shadow-lg hover:shadow-cyan-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {selectedSession === session.id ? "Active" : t("showQR")}
-                  </button>
-                </div>
-              </div>
+                session={session}
+                selectedSession={selectedSession}
+                startQRRotation={startQRRotation}
+                t={t}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile Sessions List */}
+        <div className="sm:hidden">
+          <h2 className="text-xl font-bold text-cyan-400 mb-4">
+            {t("sessions")}
+          </h2>
+          <div className="space-y-4">
+            {sessions.map((session) => (
+              <SessionCard
+                key={session.id}
+                session={session}
+                selectedSession={selectedSession}
+                startQRRotation={startQRRotation}
+                t={t}
+              />
             ))}
           </div>
         </div>
