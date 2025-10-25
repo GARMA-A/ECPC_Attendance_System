@@ -32,6 +32,22 @@ export default function Login() {
     // Animated Gradient Background
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-blue-900 animate-gradient-slow flex items-center justify-center px-4 overflow-hidden">
 
+
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        {[...Array(10)].map((_, i) => (
+          <span
+            key={i}
+            className="shooting-star"
+            style={{
+              top: `${i * 10}%`,
+              right: `${i * 20}px`,
+              animationDelay: `${i * 2}s`,
+              animationDuration: `${15 + i * 2}s`
+            }}
+          />
+        ))}
+      </div>
+
       <div className="max-w-md lg:max-w-4xl w-full animate-fade-in-up">
 
         <div className="relative rounded-2xl p-px bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500 shadow-2xl shadow-cyan-500/20 animate-text-gradient">
@@ -48,7 +64,6 @@ export default function Login() {
 
             <div className="w-full lg:w-1/2 p-8">
 
-              {/* --- Your existing form logic (untouched) --- */}
               <div className="flex justify-between items-center mb-8">
                 <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent animate-text-gradient">
                   {t('login')}
