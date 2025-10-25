@@ -37,8 +37,7 @@ export default function Layout({ children }) {
   );
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-900">
-
+    <div className="relative min-h-screen overflow-hidden bg-slate-900 z-10">
       <nav className="sticky top-0 z-50 bg-slate-800/70 backdrop-blur-lg border-b border-slate-700/50 shadow-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
@@ -99,9 +98,10 @@ export default function Layout({ children }) {
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto my-6 sm:my-8 px-4 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto my-6 sm:my-8 px-4 sm:px-6 lg:px-8 z-10">
         {children}
       </main>
+
     </div>
   );
 }

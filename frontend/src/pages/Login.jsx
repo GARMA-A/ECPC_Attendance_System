@@ -28,9 +28,48 @@ export default function Login() {
     }
   };
 
+  const ICPCLogo = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      className="h-8 w-8"
+    >
+      {/* Outer circle */}
+      <circle cx="50" cy="50" r="48" fill="white" stroke="#444" strokeWidth="2" />
+
+      {/* Blue bar */}
+      <rect x="25" y="30" width="12" height="40" rx="3" fill="#4285F4" />
+
+      {/* Yellow bar */}
+      <rect x="44" y="30" width="12" height="40" rx="3" fill="#FBBC05" />
+
+      {/* Red bar */}
+      <rect x="63" y="30" width="12" height="40" rx="3" fill="#EA4335" />
+    </svg>
+  );
+
+
   return (
     // Animated Gradient Background
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-blue-900 animate-gradient-slow flex items-center justify-center px-4 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-blue-900 animate-gradient-slow flex items-center justify-center px-4 overflow-hidden ">
+
+      <img
+        src="../../public/imgs/ECPC.jpeg"
+        alt=""
+        className=" absolute top-10 right-10 w-52 h-52 object-cover 
+               rounded-bl-[100px] pointer-events-none z-0
+               glow-blue animate-float-gentle"
+      />
+
+      {/* Bottom Left - Code Image with Green Glow */}
+      <img
+        src="../../public/imgs/icpcLOGO.jpg"
+        alt=""
+        className=" absolute bottom-10 left-10 w-52 h-52 object-cover 
+               rounded-tr-[100px] pointer-events-none z-0
+               glow-green animate-float-gentle-reverse"
+      />
+
 
 
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -65,11 +104,16 @@ export default function Login() {
             <div className="w-full lg:w-1/2 p-8">
 
               <div className="flex justify-between items-center mb-8">
-                <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent animate-text-gradient">
-                  {t('login')}
-                </h2>
+                <div className="flex items-center gap-3">
+                  <ICPCLogo />
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent animate-text-gradient">
+                    {t('login')}
+                  </h2>
+
+                </div>
                 <LanguageToggle />
               </div>
+
 
               {error && (
                 <div className="mb-4 p-3 bg-red-900/50 border border-red-700 text-red-200 rounded-lg animate-shake">
@@ -182,6 +226,6 @@ export default function Login() {
         </div>
       </div>
 
-    </div>
+    </div >
   );
 }

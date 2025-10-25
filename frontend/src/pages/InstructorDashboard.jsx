@@ -285,7 +285,7 @@ export default function InstructorDashboard() {
         )}
 
         {/* Desktop Sessions List */}
-        <div className="hidden sm:block bg-slate-800 border border-slate-700 rounded-lg shadow-2xl p-6">
+        <div className="hidden sm:block bg-slate-800 border border-slate-700 rounded-lg shadow-2xl p-6 z-10">
           <h2 className="text-xl font-bold text-cyan-400 mb-4">
             {t("sessions")}
           </h2>
