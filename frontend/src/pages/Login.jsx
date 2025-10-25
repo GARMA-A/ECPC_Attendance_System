@@ -54,7 +54,7 @@ export default function Login() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-blue-900 animate-gradient-slow flex items-center justify-center px-4 overflow-hidden ">
 
       <img
-        src="../../public/imgs/ECPC.jpeg"
+        src="./imgs/aswanICPC.png"
         alt=""
         className=" absolute top-10 right-10 w-52 h-52 object-cover 
                rounded-bl-[100px] pointer-events-none z-0
@@ -63,7 +63,7 @@ export default function Login() {
 
       {/* Bottom Left - Code Image with Green Glow */}
       <img
-        src="../../public/imgs/icpcLOGO.jpg"
+        src="./imgs/icpcLOGO.jpg"
         alt=""
         className=" absolute bottom-10 left-10 w-52 h-52 object-cover 
                rounded-tr-[100px] pointer-events-none z-0
