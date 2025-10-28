@@ -9,7 +9,7 @@ class ApiService {
     const url = `${this.baseURL}${endpoint}`;
     const config = {
       ...options,
-      credentials: "include", // Important for cookies
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         ...options.headers,

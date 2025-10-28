@@ -1,6 +1,7 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { authMiddleware, roleMiddleware } from "../middleware/auth.js";
+import { parse } from "dotenv";
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -61,6 +62,24 @@ router.delete(
     }
   }
 );
+
+router.delete("/user/:id",
+  authMiddleware,
+  roleMiddleware("admin"),
+  async (req, res) => {
+    try {
+      const id = parseInt(req.params.id)
+      const user = await prisma.user.findUnique({ where: { id } })
+      if (!user) {
+        return res.status(400).json({ error: "no user was found" })
+      }
+      await prisma.user.delete({ where: { id } })
+      return res.json({ success: true, message: "User deleted successfully" })
+    } catch (error) {
+      return res.json({ error })
+    }
+  }
+)
 
 // Manually add attendance record (Admin only)
 router.post(

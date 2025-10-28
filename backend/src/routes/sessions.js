@@ -41,7 +41,7 @@ router.post(
 );
 
 // Get all sessions
-router.get("/", authMiddleware, async (req, res) => {
+router.get("/", authMiddleware, async (_, res) => {
   try {
     const sessions = await prisma.session.findMany({
       include: {
@@ -61,7 +61,6 @@ router.get("/", authMiddleware, async (req, res) => {
         date: "desc",
       },
     });
-
     return res.json({ sessions });
   } catch (error) {
     console.error("Get sessions error:", error);
@@ -220,5 +219,27 @@ router.get(
     }
   }
 );
+
+router.delete("/:id",
+  authMiddleware,
+  roleMiddleware("instructor", "admin"),
+  async (req, res) => {
+    try {
+      const sessionId = parseInt(req.params.id);
+
+      const session = await prisma.session.findUnique({ where: { id: sessionId } })
+      if (!session) {
+        return res.status("400").json({ error: "session not exist" })
+      }
+      await prisma.session.delete({
+        where: { id: sessionId },
+      });
+
+      return res.json({ success: true, message: "Session deleted" });
+    } catch (error) {
+      console.error("Delete session error:", error);
+      return res.status(500).json({ error: "Failed to delete session", realError: error });
+    }
+  });
 
 export default router;
