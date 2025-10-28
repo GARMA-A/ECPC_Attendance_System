@@ -100,18 +100,6 @@ router.post("/signup", authLimiter, async (req, res) => {
 
     console.log("Created new user:", newUser);
 
-    const token = generateToken(newUser);
-
-    const isSecure = process.env.COOKIE_SECURE === "true";
-    const sameSite = process.env.COOKIE_SAME_SITE || "lax";
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: isSecure,
-      sameSite: sameSite,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
     return res.status(201).json({
       success: true,
       message: "User registered successfully",

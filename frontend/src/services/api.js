@@ -38,6 +38,12 @@ class ApiService {
       body: JSON.stringify({ username, password }),
     });
   }
+  async createUser(user) {
+    return this.request("/api/auth/signup", {
+      method: "POST",
+      body: JSON.stringify(user),
+    });
+  }
 
   async logout() {
     return this.request("/api/auth/logout", {
