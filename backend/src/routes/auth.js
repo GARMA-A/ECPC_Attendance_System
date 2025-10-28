@@ -62,7 +62,7 @@ router.post("/login", authLimiter, async (req, res) => {
 // Signup
 router.post("/signup", authLimiter, async (req, res) => {
   try {
-    const { username, password, name, groupName } = req.body;
+    const { username, password, name, groupName, role } = req.body;
 
     if (!username || !password || !name) {
       return res.status(400).json({ error: "Username, password, and name are required" });
@@ -86,7 +86,7 @@ router.post("/signup", authLimiter, async (req, res) => {
         password: hashedPassword,
         name,
         groupName,
-        role: "student",
+        role: role || "student",
       },
       select: {
         id: true,

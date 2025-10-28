@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import LanguageToggle from "../components/LanguageToggle";
+import { RingLoader } from "react-spinners";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -11,6 +12,8 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const { t } = useLanguage();
+  const [loadedA, setLoadedA] = useState(false)
+  const [loadedB, setLoadedB] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -27,6 +30,7 @@ export default function Login() {
       setLoading(false);
     }
   };
+  // Add this component inside your Login.js file, above the `return`
 
   const ICPCLogo = () => (
     <svg
@@ -53,22 +57,54 @@ export default function Login() {
     // Animated Gradient Background
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-blue-900 animate-gradient-slow flex items-center justify-center px-4 overflow-hidden ">
 
-      <img
-        src="./imgs/aswanICPC.png"
-        alt=""
-        className=" absolute top-10 right-10 w-52 h-52 object-cover 
-               rounded-bl-[100px] pointer-events-none z-0
-               glow-blue animate-float-gentle"
-      />
+      {/* Top Right - Aswan ICPC Image */}
+      <div
+        className="absolute top-10 right-10 w-52 h-52 
+                   pointer-events-none z-0 animate-float-gentle"
+      >
+        {/* Show Spinner while loading */}
+        {!loadedA && (
+          <div className="absolute inset-0 flex items-center justify-center 
+                          rounded-bl-[100px] bg-slate-800/30 backdrop-blur-sm">
+            {/* 3. Use the new spinner and pass in a color */}
+            <RingLoader color="#3b82f6" size={80} />
+          </div>
+        )}
 
-      {/* Bottom Left - Code Image with Green Glow */}
-      <img
-        src="./imgs/icpcLOGO.jpg"
-        alt=""
-        className=" absolute bottom-10 left-10 w-52 h-52 object-cover 
-               rounded-tr-[100px] pointer-events-none z-0
-               glow-green animate-float-gentle-reverse"
-      />
+        {/* The Image (fades in when loaded) */}
+        <img
+          src="./imgs/aswanICPC.png"
+          alt="Aswan ICPC Logo"
+          className={`w-full h-full object-cover rounded-bl-[100px] glow-blue
+                      transition-opacity duration-700 ${loadedA ? "opacity-100" : "opacity-0"
+            }`}
+          onLoad={() => setLoadedA(true)}
+        />
+      </div>
+
+      {/* Bottom Left - ICPC Logo Image */}
+      <div
+        className="absolute bottom-10 left-10 w-52 h-52 
+                   pointer-events-none z-0 animate-float-gentle-reverse"
+      >
+        {/* Show Spinner while loading */}
+        {!loadedB && (
+          <div className="absolute inset-0 flex items-center justify-center 
+                          rounded-tr-[100px] bg-slate-800/30 backdrop-blur-sm">
+            <RingLoader color="#22c55e" size={80} />
+          </div>
+        )}
+
+        {/* The Image (fades in when loaded) */}
+        <img
+          src="./imgs/icpcLOGO.jpg"
+          alt="ICPC Logo"
+          className={`w-full h-full object-cover rounded-tr-[100px] glow-green
+                      transition-opacity duration-700 ${loadedB ? "opacity-100" : "opacity-0"
+            }`}
+          onLoad={() => setLoadedB(true)}
+        />
+      </div>
 
 
 
