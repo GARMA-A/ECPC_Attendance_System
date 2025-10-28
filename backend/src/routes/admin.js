@@ -1,7 +1,6 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { authMiddleware, roleMiddleware } from "../middleware/auth.js";
-import { parse } from "dotenv";
 
 const router = express.Router();
 const prisma = new PrismaClient();

@@ -68,6 +68,9 @@ const translations = {
     student: "Student",
     instructor: "Instructor",
     admin: "Admin",
+    createUser: "Create User",
+    groupName: "Group Name"
+
   },
   ar: {
     // Common
@@ -133,6 +136,9 @@ const translations = {
     student: "طالب",
     instructor: "محاضر",
     admin: "مدير",
+    createUser: "انشاء مستخدم",
+    groupName: "اسم الجروب"
+
   },
 };
 

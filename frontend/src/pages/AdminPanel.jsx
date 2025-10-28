@@ -11,8 +11,20 @@ export default function AdminPanel() {
   const [selectedTab, setSelectedTab] = useState("users");
   const [pagination, setPagination] = useState({ page: 1, totalPages: 1 });
 
+  // --- New State for Add User Form ---
+  const [newName, setNewName] = useState("");
+  const [newUsername, setNewUsername] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newGroupName, setNewGroupName] = useState("");
+  const [newRole, setNewRole] = useState("student"); // Default role
+  const [loading, setLoading] = useState(false);
+  // -------------------------------------
+
   useEffect(() => {
-    loadData();
+    // Don't reload data if the tab is 'addUser'
+    if (selectedTab !== "addUser") {
+      loadData();
+    }
   }, [selectedTab, pagination.page]);
 
   const loadData = async () => {
@@ -40,7 +52,7 @@ export default function AdminPanel() {
 
     try {
       await api.deleteAttendance(id);
-      loadData();
+      loadData(); // Reload current tab data
     } catch (error) {
       alert("Failed to delete: " + error.message);
     }
@@ -53,13 +65,43 @@ export default function AdminPanel() {
 
     try {
       await api.deleteUser(id);
-      loadData();
+      loadData(); // Reload current tab data
     } catch (error) {
       alert("Failed to delete: " + error.message);
     }
-  }
+  };
 
+  // --- New Handler for Creating User ---
+  const handleCreateUser = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
+    const userData = {
+      name: newName,
+      username: newUsername,
+      password: newPassword,
+      groupName: newGroupName,
+      role: newRole,
+    };
+
+    try {
+      await api.createUser(userData); // Assuming you have this function in your api service
+      alert("User created successfully!");
+      // Reset form
+      setNewName("");
+      setNewUsername("");
+      setNewPassword("");
+      setNewGroupName("");
+      setNewRole("student");
+      // Switch to users tab to see the new user
+      setSelectedTab("users");
+    } catch (error) {
+      alert("Failed to create user: " + (error.response?.data?.message || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+  // ---------------------------------------
 
   return (
     <Layout>
@@ -95,6 +137,17 @@ export default function AdminPanel() {
           >
             {t("sessions")}
           </button>
+          {/* --- New Tab Button --- */}
+          <button
+            onClick={() => setSelectedTab("addUser")}
+            className={`px-4 py-2 font-medium transition-colors ${selectedTab === "addUser"
+              ? "text-cyan-400 border-b-2 border-cyan-400"
+              : "text-slate-400 hover:text-slate-300"
+              }`}
+          >
+            {t("addUser")}
+          </button>
+          {/* ---------------------- */}
         </div>
 
         {/* Users Tab */}
@@ -303,6 +356,204 @@ export default function AdminPanel() {
             </table>
           </div>
         )}
+
+        {/* --- New Add User Tab --- */}
+        {
+          selectedTab === "addUser" && (
+            <div className="max-w-md mx-auto bg-slate-800 border border-slate-700 rounded-lg shadow-2xl p-8">
+              {/* *
+        * STYLES FROM YOUR SECOND FORM (HEADER) ARE ADDED HERE
+        *
+      */}
+              <div className="flex justify-between items-center mb-8">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent animate-text-gradient">
+                    {t('createUser')} {/* Changed from t('login') to match the form */}
+                  </h2>
+                </div>
+              </div>
+
+              {/* *
+        * ALL FIELDS FROM YOUR FIRST FORM ARE PRESERVED BELOW
+        *
+      */}
+              <form onSubmit={handleCreateUser} className="space-y-8">
+                {/* Name */}
+                <div className="relative">
+                  <input
+                    id="name"
+                    type="text"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    placeholder=" "
+                    className="peer w-full px-4 py-3 bg-transparent border-b-2 border-slate-600 text-white 
+                       focus:outline-none focus:border-cyan-500 transition-all duration-300"
+                    required
+                  />
+                  <label
+                    htmlFor="name"
+                    className="absolute left-4 -top-3.5 text-slate-400 transition-all duration-300 
+                       text-sm 
+                       peer-placeholder-shown:top-3 peer-placeholder-shown:text-base 
+                       peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-cyan-400
+                       peer-[:not(:placeholder-shown)]:-top-3.5 
+                       peer-[:not(:placeholder-shown)]:text-sm 
+                       peer-[:not(:placeholder-shown)]:text-cyan-400
+                       pointer-events-none"
+                  >
+                    {t('name')}
+                  </label>
+                </div>
+
+                {/* Username */}
+                <div className="relative">
+                  <input
+                    id="username"
+                    type="text"
+                    value={newUsername}
+                    onChange={(e) => setNewUsername(e.target.value)}
+                    placeholder=" "
+                    className="peer w-full px-4 py-3 bg-transparent border-b-2 border-slate-600 text-white 
+                       focus:outline-none focus:border-cyan-500 transition-all duration-300"
+                    required
+                  />
+                  <label
+                    htmlFor="username"
+                    className="absolute left-4 -top-3.5 text-slate-400 transition-all duration-300 
+                       text-sm 
+                       peer-placeholder-shown:top-3 peer-placeholder-shown:text-base 
+                       peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-cyan-400
+                       peer-[:not(:placeholder-shown)]:-top-3.5 
+                       peer-[:not(:placeholder-shown)]:text-sm 
+                       peer-[:not(:placeholder-shown)]:text-cyan-400
+                       pointer-events-none"
+                  >
+                    {t('username')}
+                  </label>
+                </div>
+
+                {/* Password */}
+                <div className="relative">
+                  <input
+                    id="password"
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder=" "
+                    className="peer w-full px-4 py-3 bg-transparent border-b-2 border-slate-600 text-white 
+                       focus:outline-none focus:border-cyan-500 transition-all duration-300"
+                    required
+                  />
+                  <label
+                    htmlFor="password"
+                    className="absolute left-4 -top-3.5 text-slate-400 transition-all duration-300 
+                       text-sm 
+                       peer-placeholder-shown:top-3 peer-placeholder-shown:text-base 
+                       peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-cyan-400
+                       peer-[:not(:placeholder-shown)]:-top-3.5 
+                       peer-[:not(:placeholder-shown)]:text-sm 
+                       peer-[:not(:placeholder-shown)]:text-cyan-400
+                       pointer-events-none"
+                  >
+                    {t('password')}
+                  </label>
+                </div>
+
+                {/* Group Name */}
+                <div className="relative">
+                  <input
+                    id="groupName"
+                    type="text"
+                    value={newGroupName}
+                    onChange={(e) => setNewGroupName(e.target.value)}
+                    placeholder=" "
+                    className="peer w-full px-4 py-3 bg-transparent border-b-2 border-slate-600 text-white 
+                       focus:outline-none focus:border-cyan-500 transition-all duration-300"
+                    required
+                  />
+                  <label
+                    htmlFor="groupName"
+                    className="absolute left-4 -top-3.5 text-slate-400 transition-all duration-300 
+                       text-sm 
+                       peer-placeholder-shown:top-3 peer-placeholder-shown:text-base 
+                       peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-cyan-400
+                       peer-[:not(:placeholder-shown)]:-top-3.5 
+                       peer-[:not(:placeholder-shown)]:text-sm 
+                       peer-[:not(:placeholder-shown)]:text-cyan-400
+                       pointer-events-none"
+                  >
+                    {t('groupName')}
+                  </label>
+                </div>
+
+                {/* Role */}
+                <div className="relative">
+                  <select
+                    id="role"
+                    value={newRole}
+                    onChange={(e) => setNewRole(e.target.value)}
+                    className="peer w-full px-4 py-3 bg-transparent border-b-2 border-slate-600 text-white 
+                       focus:outline-none focus:border-cyan-500 transition-all duration-300"
+                    required
+                  >
+                    <option value="student" className="bg-slate-900 text-white">{t('student')}</option>
+                    <option value="instructor" className="bg-slate-900 text-white">{t('instructor')}</option>
+                  </select>
+                  <label
+                    htmlFor="role"
+                    className="absolute left-4 -top-3.5 text-slate-400 transition-all duration-300 
+                       text-sm 
+                       peer-placeholder-shown:top-3 peer-placeholder-shown:text-base 
+                       peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-cyan-400
+                       peer-[:not(:placeholder-shown)]:-top-3.5 
+                       peer-[:not(:placeholder-shown)]:text-sm 
+                       peer-[:not(:placeholder-shown)]:text-cyan-400
+                       pointer-events-none"
+                  >
+                    {t('role')}
+                  </label>
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="relative w-full py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold 
+                     rounded-lg shadow-lg hover:shadow-cyan-500/50 
+                     hover:scale-105 active:scale-95 
+                     transition-all duration-300 ease-in-out
+                     disabled:opacity-70 disabled:cursor-not-allowed disabled:scale-100
+                     flex items-center justify-center gap-2"
+                >
+                  {loading && (
+                    <svg
+                      className="animate-spin h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  )}
+                  {loading ? t('loading') : t('createUser')}
+                </button>
+              </form>
+            </div>
+          )
+        }
+        {/* ---------------------- */}
       </div>
     </Layout>
   );
