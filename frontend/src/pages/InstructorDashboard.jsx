@@ -18,8 +18,15 @@ export default function InstructorDashboard() {
     courseName: "",
     date: new Date().toISOString().slice(0, 16),
   });
+
   const qrIntervalRef = useRef(null);
 
+  function handleSessionDeleted(deletedSessionId) {
+    // Filter the deleted session out of the local state
+    setSessions(prevSessions =>
+      prevSessions.filter(session => session.id !== deletedSessionId)
+    );
+  }
   useEffect(() => {
     loadSessions();
   }, []);
@@ -297,6 +304,7 @@ export default function InstructorDashboard() {
                 selectedSession={selectedSession}
                 startQRRotation={startQRRotation}
                 t={t}
+                onSessionDeleted={handleSessionDeleted}
               />
             ))}
           </div>
@@ -315,6 +323,7 @@ export default function InstructorDashboard() {
                 selectedSession={selectedSession}
                 startQRRotation={startQRRotation}
                 t={t}
+                onSessionDeleted={handleSessionDeleted}
               />
             ))}
           </div>

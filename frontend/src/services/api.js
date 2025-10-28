@@ -58,6 +58,10 @@ class ApiService {
     return this.request(`/api/sessions/${id}`);
   }
 
+  async deleteSession(id) {
+    return this.request(`/api/sessions/${id}`, { method: "DELETE" });
+  }
+
   async createSession(data) {
     return this.request("/api/sessions", {
       method: "POST",
@@ -102,6 +106,12 @@ class ApiService {
 
   async deleteAttendance(attendanceId) {
     return this.request(`/api/admin/attendance/${attendanceId}`, {
+      method: "DELETE",
+    });
+  }
+
+  async deleteUser(attendanceId) {
+    return this.request(`/api/admin/user/${attendanceId}`, {
       method: "DELETE",
     });
   }

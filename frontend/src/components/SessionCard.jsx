@@ -1,9 +1,35 @@
+import api from "../services/api";
+
 export default function SessionCard({
   session,
   selectedSession,
   startQRRotation,
   t,
+  onSessionDeleted
 }) {
+
+  async function deleteSession(sessionId) {
+    // (Optional) Add a confirmation
+    if (!window.confirm("Are you sure you want to delete this session?")) {
+      return;
+    }
+
+    try {
+      // 3. Await the API call
+      await api.deleteSession(sessionId);
+
+      // 4. Call the parent function on success
+      if (onSessionDeleted) {
+        onSessionDeleted(sessionId);
+      }
+
+    } catch (error) {
+      // 5. Handle errors
+      console.error("Failed to delete session:", error);
+      alert(`Error: ${error.message}`); // Show the error
+    }
+  }
+
   return (
     <div
       key={session.id}
@@ -21,7 +47,18 @@ export default function SessionCard({
           </p>
         </div>
 
-        <div className="w-1/2 flex justify-end">
+        <div className="w-1/2 flex justify-end space-x-2">
+
+          <button
+            onClick={() => deleteSession(session.id)}
+            disabled={selectedSession === session.id}
+            className="px-3 sm:px-4 py-2 bg-gradient-to-r from-red-600 to-rose-600 text-white text-xs sm:text-sm font-semibold 
+                           rounded-lg shadow-lg hover:shadow-red-500/50
+                           hover:scale-105 active:scale-95 
+                           transition-all duration-300 ease-in-out"
+          >
+            {t("Delete")}
+          </button>
           <button
             onClick={() => startQRRotation(session.id)}
             disabled={selectedSession === session.id}
@@ -29,6 +66,7 @@ export default function SessionCard({
           >
             {selectedSession === session.id ? "Active" : t("showQR")}
           </button>
+
         </div>
       </div>
     </div>

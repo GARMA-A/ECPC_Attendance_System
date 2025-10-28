@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import api from "../services/api";
 import Layout from "../components/Layout";
@@ -46,6 +45,21 @@ export default function AdminPanel() {
       alert("Failed to delete: " + error.message);
     }
   };
+
+  const handleDeleteUser = async (id) => {
+    if (!confirm("Are you sure you want to delete this user?")) {
+      return;
+    }
+
+    try {
+      await api.deleteUser(id);
+      loadData();
+    } catch (error) {
+      alert("Failed to delete: " + error.message);
+    }
+  }
+
+
 
   return (
     <Layout>
@@ -107,6 +121,9 @@ export default function AdminPanel() {
                   <th className="px-6 py-3 text-start text-xs font-medium text-cyan-400 uppercase tracking-wider">
                     Attendances
                   </th>
+                  <th className="px-6 py-3 text-start text-xs font-medium text-cyan-400 uppercase tracking-wider">
+                    Delete
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-slate-800 divide-y divide-slate-700">
@@ -138,6 +155,13 @@ export default function AdminPanel() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
                       {user._count.attendances}
+                    </td>
+
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                      <button onClick={() => handleDeleteUser(user.id)} className="px-3 sm:px-4 py-2 bg-gradient-to-r from-red-600 to-rose-600 text-white text-xs sm:text-sm font-semibold 
+                           rounded-lg shadow-lg hover:shadow-red-500/50
+                           hover:scale-105 active:scale-95 
+                           transition-all duration-300 ease-in-out">Delete</button>
                     </td>
                   </tr>
                 ))}

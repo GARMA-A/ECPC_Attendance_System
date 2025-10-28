@@ -30,7 +30,7 @@ model Session {
   courseName String
   date       DateTime
   createdBy  Int
-  creator    User     @relation(fields: [createdBy], references: [id])
+creator     User     @relation(fields: [createdBy], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -42,7 +42,7 @@ model QRToken {
   id        Int      @id @default(autoincrement())
   token     String   @unique
   sessionId Int
-  session   Session  @relation(fields: [sessionId], references: [id])
+  session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade) 
   expiresAt DateTime
   createdAt DateTime @default(now())
 
@@ -53,9 +53,9 @@ model QRToken {
 model Attendance {
   id        Int      @id @default(autoincrement())
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   sessionId Int
-  session   Session  @relation(fields: [sessionId], references: [id])
+session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade) 
   scannedAt DateTime @default(now())
   ipAddress String?
   userAgent String?
