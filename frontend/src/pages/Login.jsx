@@ -96,7 +96,8 @@ export default function Login() {
             <div className="hidden lg:block lg:w-1/2 overflow-hidden">
               <div
                 className="w-full h-full bg-cover bg-center animate-pan
-                           bg-[url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')]"
+                           bg-[url('./imgs/AIGenerated_ICPC_GEMINI.png')]"
+
               >
               </div>
             </div>
